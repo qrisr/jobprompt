@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Prompts Generator (Debug Version)</title>
+    <title>Job Prompts Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,12 +21,6 @@
 </head>
 <body class="bg-gradient-to-br from-cyan-50 to-blue-50 min-h-screen py-8 sm:py-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Debug Panel hinzugefügt -->
-        <div id="debugPanel" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
-            <p class="font-bold">Debug-Informationen:</p>
-            <div id="debugOutput" class="mt-2 text-sm"></div>
-        </div>
-
         <div class="bg-white rounded-xl shadow-2xl overflow-hidden">
             <div class="bg-primary text-white py-6 px-6 sm:px-8">
                 <h2 class="text-2xl sm:text-3xl font-bold text-center">Job Prompts Generator</h2>
@@ -84,24 +78,32 @@
                 </div>
             </div>
         </div>
+        
+        <footer class="mt-8 text-center">
+            <div id="ctaSection" class="hidden bg-white rounded-lg p-6 shadow-lg max-w-md mx-auto mb-6 border-2 border-cyan-100">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-100 text-cyan-600 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-gray-800 font-bold text-xl mb-2">Nächster Level gefällig?</h3>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Entdecke, wie du AI & Automatisierung für deine gesamten Arbeitsprozesse nutzen kannst - von Routineaufgaben bis strategischen Entscheidungen.
+                    </p>
+                </div>
+                <a href="https://www.bit.ly/qrigenda" target="_blank" class="inline-block w-full text-center bg-primary hover:bg-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl">
+                    Kostenloses AI-Beratungsgespräch sichern 🎯
+                </a>
+                <p class="text-center text-sm text-gray-500 mt-3">30 Minuten personalisierte Beratung, kein Verkaufsgespräch</p>
+            </div>
+            <p class="text-gray-500 text-sm">© Job Prompts Generator by <a href="https://www.contextery.com" target="_blank" class="text-primary hover:text-cyan-700 transition-colors">Contextery</a>.</p>
+        </footer>
     </div>
 
     <script>
-        // Debug-Funktionen
-        function debugLog(message) {
-            const debugOutput = document.getElementById('debugOutput');
-            const timestamp = new Date().toLocaleTimeString();
-            debugOutput.innerHTML += `<div>${timestamp}: ${message}</div>`;
-            console.log(message);
-        }
-
-        // Initiale Debug-Ausgabe
-        debugLog('Seite geladen. Browser: ' + navigator.userAgent);
-        debugLog('Window location: ' + window.location.href);
-
         document.getElementById('promptForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            debugLog('Form submitted');
             
             const submitBtn = document.getElementById('submitBtn');
             const loadingDiv = document.getElementById('loading');
@@ -121,61 +123,33 @@
                 job_title: document.getElementById('jobTitle').value
             };
             
-            debugLog('Daten vorbereitet: ' + JSON.stringify(data));
-            
             try {
-                // Debug: Prüfe verschiedene Webhook-URLs
-                const webhookUrls = [
-                    'https://contextery.app.n8n.cloud/webhook-test/1114d4fb-c4f4-4baf-a357-eebfc9348b0f',
-                    'https://contextery.app.n8n.cloud/webhook/1114d4fb-c4f4-4baf-a357-eebfc9348b0f'
-                ];
+                // Korrekte Webhook-URL ohne -test
+                const webhookUrl = 'https://contextery.app.n8n.cloud/webhook/1114d4fb-c4f4-4baf-a357-eebfc9348b0f';
                 
-                let success = false;
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
                 
-                for (const webhookUrl of webhookUrls) {
-                    debugLog('Versuche Webhook-URL: ' + webhookUrl);
-                    
-                    try {
-                        const response = await fetch(webhookUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify(data),
-                            mode: 'cors'
-                        });
-                        
-                        debugLog('Response Status: ' + response.status);
-                        debugLog('Response Headers: ' + JSON.stringify(Object.fromEntries(response.headers.entries())));
-                        
-                        const responseText = await response.text();
-                        debugLog('Response Text: ' + responseText);
-                        
-                        if (response.ok) {
-                            success = true;
-                            break;
-                        }
-                    } catch (fetchError) {
-                        debugLog('Fetch Error: ' + fetchError.toString());
-                        debugLog('Error Stack: ' + fetchError.stack);
-                    }
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
                 }
                 
-                if (success) {
-                    loadingDiv.classList.add('hidden');
-                    promptContent.innerHTML = 'Perfekt! Die generierten Prompts wurden erfolgreich an deine E-Mail gesendet. Bitte prüfe dein Postfach.';
-                    responseDiv.classList.remove('hidden');
-                } else {
-                    throw new Error('Alle Webhook-URLs fehlgeschlagen');
-                }
+                // E-Mail wird gesendet - Erfolgsanzeige anzeigen
+                loadingDiv.classList.add('hidden');
+                promptContent.innerHTML = 'Perfekt! Die generierten Prompts wurden erfolgreich an deine E-Mail gesendet. Bitte prüfe dein Postfach.';
+                responseDiv.classList.remove('hidden');
+                document.getElementById('ctaSection').classList.remove('hidden');
                 
             } catch (error) {
-                debugLog('Main Error: ' + error.toString());
-                debugLog('Error Stack: ' + error.stack);
-                
+                console.error('Error:', error);
                 loadingDiv.classList.add('hidden');
-                promptContent.innerHTML = 'Ups! Es ist ein Fehler aufgetreten. Details siehe Debug-Panel oben.';
+                promptContent.innerHTML = 'Ups! Es ist ein Fehler aufgetreten. Bitte versuche es später noch einmal.';
                 responseDiv.classList.remove('hidden');
             } finally {
                 // Button zurücksetzen
@@ -186,22 +160,6 @@
                     submitBtn.classList.add('hover:bg-cyan-600');
                 }, 3000);
             }
-        });
-        
-        // Prüfe CORS-Präflug-Anfrage
-        debugLog('Test CORS Preflight');
-        fetch('https://contextery.app.n8n.cloud/webhook-test/1114d4fb-c4f4-4baf-a357-eebfc9348b0f', {
-            method: 'OPTIONS',
-            headers: {
-                'Origin': window.location.origin,
-                'Access-Control-Request-Method': 'POST',
-                'Access-Control-Request-Headers': 'Content-Type'
-            }
-        }).then(response => {
-            debugLog('CORS Preflight Response: ' + response.status);
-            debugLog('CORS Headers: ' + JSON.stringify(Object.fromEntries(response.headers.entries())));
-        }).catch(e => {
-            debugLog('CORS Preflight Error: ' + e.toString());
         });
     </script>
 </body>
