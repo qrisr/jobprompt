@@ -83,7 +83,7 @@
         </div>
         
         <footer class="mt-8 text-center">
-            <div class="bg-white rounded-lg p-6 shadow-lg max-w-md mx-auto mb-6 border-2 border-cyan-100">
+            <div id="ctaSection" class="hidden bg-white rounded-lg p-6 shadow-lg max-w-md mx-auto mb-6 border-2 border-cyan-100">
                 <div class="text-center mb-6">
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-100 text-cyan-600 mb-4">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@
             };
             
             try {
-                const webhookUrl = 'https://contextery.app.n8n.cloud/webhook/1114d4fb-c4f4-4baf-a357-eebfc9348b0f';
+                const webhookUrl = 'https://contextery.app.n8n.cloud/webhook-test/1114d4fb-c4f4-4baf-a357-eebfc9348b0f';
                 
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
@@ -138,45 +138,4 @@
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Network error');
-                }
-                
-                const result = await response.json();
-                
-                // Prompts anzeigen
-                responseDiv.classList.remove('hidden');
-                promptContent.innerHTML = `
-                    <div class="bg-cyan-50 text-cyan-800 p-4 rounded-lg mb-4 border border-cyan-200">
-                        <div class="flex items-center justify-center mb-2">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                            </svg>
-                            <p class="font-semibold">Prompts wurden erfolgreich versendet! 📨</p>
-                        </div>
-                        <p class="text-center">${result.message || 'Deine personalisierten Prompts wurden erstellt.'}</p>
-                    </div>
-                    <p class="text-gray-600 mb-2">Die Prompts wurden an deine E-Mail-Adresse gesendet.</p>
-                    <p class="text-gray-600">Bitte überprüfe deinen Posteingang in wenigen Minuten.</p>
-                `;
-                
-                document.getElementById('promptForm').reset();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                responseDiv.classList.remove('hidden');
-                promptContent.innerHTML = `
-                    <div class="bg-red-50 text-red-800 p-4 rounded-lg border border-red-200">
-                        <p class="font-semibold">Fehler aufgetreten. Bitte versuche es später erneut.</p>
-                    </div>
-                `;
-            } finally {
-                loadingDiv.classList.add('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Kostenlos generieren 🚀';
-                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                submitBtn.classList.add('hover:bg-cyan-600');
-            }
-        });
-    </script>
-</body>
-</html>
+                    throw new
