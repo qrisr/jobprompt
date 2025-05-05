@@ -191,7 +191,14 @@
             } catch (error) {
                 console.error('Error:', error);
                 loadingDiv.classList.add('hidden');
-                promptContent.innerHTML = 'Ups! Es ist ein Fehler aufgetreten. Bitte versuche es später noch einmal.';
+                
+                // Prüfen ob es ein Rate-Limit-Fehler ist
+                if (error.message && error.message.includes('Rate limit')) {
+                    promptContent.innerHTML = '❌ Sie haben heute bereits 3 Anfragen gestellt. Bitte versuchen Sie es morgen wieder.';
+                } else {
+                    promptContent.innerHTML = 'Ups! Es ist ein Fehler aufgetreten. Bitte versuche es später noch einmal.';
+                }
+                
                 responseDiv.classList.remove('hidden');
             } finally {
                 // Button zurücksetzen
