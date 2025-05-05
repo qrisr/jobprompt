@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Prompts Generator</title>
+    
+    <!-- WhatsApp/Social Share Preview -->
+    <meta property="og:title" content="Job Prompts Generator - Die 50 besten Chat-Prompts für deinen Beruf" />
+    <meta property="og:description" content="Die besten 50 AI-Prompts für deinen Job." />
+    <meta property="og:image" content="https://i.imgur.com/OYb8GXr.png" />
+    <meta property="og:url" content="https://www.contextery.com" />
+    <meta property="og:type" content="website" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -24,13 +32,44 @@
         <div class="bg-white rounded-xl shadow-2xl overflow-hidden">
             <div class="bg-primary text-white py-6 px-6 sm:px-8">
                 <h2 class="text-2xl sm:text-3xl font-bold text-center">Job Prompts Generator</h2>
-                <p class="text-center text-lg mt-2 text-cyan-100">Erhalte die 20 wichtigsten Chat-Prompts für deinen Beruf</p>
+                <p class="text-center text-lg mt-2 text-cyan-100">Erhalte die 50 wichtigsten Chat-Prompts für deinen Beruf</p>
             </div>
             
             <div class="bg-cyan-50 border-b border-cyan-100 py-4 px-6 sm:px-8">
                 <div class="text-center">
                     <p class="text-cyan-900 font-medium mb-1">⚡ Werde 80% schneller mit den perfekten Prompts für deinen Job!</p>
                     <p class="text-cyan-800 text-sm">Kostenlos per E-Mail direkt in deinen Posteingang</p>
+                </div>
+            </div>
+
+            <!-- Video Section (Collapsible) -->
+            <div class="border-b border-gray-200">
+                <button id="videoToggle" class="w-full py-4 px-6 bg-gray-50 hover:bg-gray-100 text-left focus:outline-none">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-lg font-semibold text-gray-700">Video-Anleitung ansehen</span>
+                        </div>
+                        <svg id="videoIcon" class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                
+                <div id="videoContainer" class="hidden px-6 py-6 bg-gray-50">
+                    <!-- Tella Video Embed -->
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0;" class="rounded-lg overflow-hidden shadow-lg">
+                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+                                src="https://www.tella.tv/video/cmaaoa9y9000d0bik5z0igwcu/embed?b=0&title=0&a=1&loop=0&t=0&muted=0&wt=0" 
+                                allowfullscreen allowtransparency>
+                        </iframe>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600 text-center">
+                        Erfahre in 2 Minuten, wie du die Prompts optimal nutzen kannst
+                    </p>
                 </div>
             </div>
             
@@ -104,6 +143,15 @@
     </div>
 
     <script>
+        // Video Toggle Functionality
+        document.getElementById('videoToggle').addEventListener('click', function() {
+            const container = document.getElementById('videoContainer');
+            const icon = document.getElementById('videoIcon');
+            
+            container.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        });
+
         // Validierungsfunktionen
         function validateEmail(email) {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
